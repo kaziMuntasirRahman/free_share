@@ -1,61 +1,15 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
+import ContentForm from "./ContentForm";
 
 const Home = () => {
-  const imgbb_api_url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`;
 
   const [contents, setContents] = useState([])
 
   useEffect(() => setContents(JSON.parse(localStorage.getItem('contents')) || []), [])
 
-
-
-  const [newContent, setNewContent] = useState({
-    title: "",
-    description: "",
-    image: null
-  })
-
-  const handleContentSubmit = async (e) => {
-    e.preventDefault();
-    const { title, description, image } = newContent;
-    // console.log(newContent);
-    // console.log(JSON.parse(localStorage.getItem('contents')))
-
-    const imageFile = { image: image }; // Wrap the image file
-    if (!title && !description && !image) {
-      return alert("Please Enter your story or image.")
-    }
-
-    // if (!image) return;
-    try {
-      if (!image) {
-        return setContents([...contents, newContent])
-      }
-
-      const res = await axios.post(imgbb_api_url, imageFile, {
-        headers: {
-          "content-type": "multipart/form-data", // Ensure the file is uploaded correctly
-        },
-      })
-
-      // console.log(res.data);
-      if (res.data.status) {
-        alert("Your content has been saved.")
-
-        setContents([...contents, { title, description, image: res.data.data.url }])
-        localStorage.setItem('contents', JSON.stringify([...contents, { title, description, image: res.data.data.url }]))
-      } else {
-        alert("Failed to save content.")
-      }
-    } catch (err) {
-      console.log(err.message);
-    } finally {
-      e.target.reset();
-    }
-  }
-
   const handleDelete = async (index) => {
+    const isConfirm = confirm("Do you want to delete this post?")
+    if(!isConfirm) return;
     let storedContent = JSON.parse(localStorage.getItem('contents'))
     storedContent.splice(index, 1)
     setContents(storedContent)
@@ -65,15 +19,10 @@ const Home = () => {
   return (
     <div>
       <p>This is Home Page.</p>
-      <form onSubmit={handleContentSubmit} className="flex flex-col w-2xs gap-3">
-        <p>upload content</p>
-        <input onChange={(e) => setNewContent({ ...newContent, title: e.target.value })} type="text" className="input" placeholder="story title" />
-        <textarea onChange={(e) => setNewContent({ ...newContent, description: e.target.value })} type="text" className="textarea" placeholder="write your story" />
-        <input onChange={(e) => setNewContent({ ...newContent, image: e.target.files[0] })} type="file" className="file-input file-input-neutral" />
-        <button className="btn">submit</button>
-      </form>
 
-        <p className="text-lg my-3">total content available: {contents.length}</p>
+      <ContentForm contents={contents} setContents={setContents} />
+
+      <p className="text-lg my-3">total content available: {contents.length}</p>
       <div className="flex flex-wrap justify-between border">
         {
           // Array(10).fill().map((content, index) =>

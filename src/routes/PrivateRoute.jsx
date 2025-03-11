@@ -1,13 +1,13 @@
 import { useContext } from "react";
-import FirebaseProvider from "../providers/FirebaseProvider";
 import { Navigate, useLocation } from "react-router-dom";
+import FirebaseProvider from "../providers/FirebaseProvider";
 
 const PrivateRoute = ({ children }) => {
-  const { user, firebaseLoading } = useContext(FirebaseProvider)
+  const { user, loading } = useContext(FirebaseProvider)
   const location = useLocation()
   console.log(location)
 
-  if (firebaseLoading) {
+  if (loading) {
     return <div className="loading-spinner size-16" />
   }
 

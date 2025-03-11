@@ -1,7 +1,42 @@
-const Content = ({ content, index }) => {
+import { IoMdShareAlt } from "react-icons/io";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import { useContext } from "react";
+import { FirebaseContext } from "../../providers/FirebaseProvider";
 
-  const handleShare = (content) => {
-    console.log(content)
+const Content = ({ content, index, myPost = false }) => {
+  const axiosPublic = useAxiosPublic()
+  const { user } = useContext(FirebaseContext)
+
+  const handleShare = async (content) => {
+    // console.log(content)
+    const receiver = prompt("Enter receiver email. \nContent will be sent even if the user doesn't exist. He/she will get the message after he creates an account.")
+    if (!receiver) return;
+    console.log(receiver)
+
+    // Email validation using regex
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Check if the email is valid
+    if (!emailPattern.test(receiver)) {
+      return alert("Please enter a valid email address.");
+    }
+    const sender = user?.email;
+    let isAnonymous = true;
+    if (!sender) {
+      isAnonymous = true
+    }
+
+    try {
+      const res = await axiosPublic.post('conversations', { content, sender, receiver, isAnonymous })
+      if (res.data.insertedId) {
+        alert("Your message has been sent.")
+      }
+    } catch (err) {
+      console.log(err)
+      alert("Oops, Couldn't sent content. Please try again later.")
+    }
+
+
   }
 
   const { title, image, description, uploader, isAnonymous, isPublic, uploadTime, likedCount } = content;
@@ -39,7 +74,10 @@ const Content = ({ content, index }) => {
           }
           <div>
             <p className="text-gray-800 text-sm font-medium">{isAnonymous ? 'Anonymous' : uploader?.name}</p>
-            <p className="text-gray-500 text-xs">{isAnonymous ? '' : uploader?.email}</p>
+            {
+              myPost ||
+              <p className="text-gray-500 text-xs">{isAnonymous ? '' : uploader?.email}</p>
+            }
           </div>
         </div>
 
@@ -49,9 +87,9 @@ const Content = ({ content, index }) => {
           </p>
         </div>
       </div>
-      <div className="absolute w-full bottom-0 left-0 flex bg-gray-400 text-white">
-        <div className="flex items-center justify-center gap-1 w-1/2 border-r border-white py-1">
-          <span className="text-lg mr-1">{likedCount.length}</span>
+      <div className="absolute w-full bottom-0 left-0 flex   text-white">
+        <div className="flex items-center justify-center gap-1 w-1/2 border-r border-white bg-gray-400  hover:bg-gray-700 transition-all ease-in duration-150 py-1">
+          <span className="text-lg mr-1">{likedCount?.length}</span>
           {/* <span className="">{isLiked ? 1 : 0}</span> */}
           <label className="swap swap-flip text-lg">
             {/* this hidden checkbox controls the state */}
@@ -64,8 +102,8 @@ const Content = ({ content, index }) => {
         </div>
         <button
           onClick={() => handleShare(content)}
-          className="w-1/2 flex items-center justify-center cursor-pointer hover:bg-gray-700 transition-all ease-in duration-150">
-          share
+          className="w-1/2 flex items-center justify-center cursor-pointer bg-gray-400 hover:bg-gray-700 transition-all ease-in duration-150 text-xl tooltip" data-tip="Share">
+          <IoMdShareAlt />
         </button>
       </div>
     </div>

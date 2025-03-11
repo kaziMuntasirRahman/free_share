@@ -107,7 +107,7 @@ const ContentForm = ({ contents, setContents }) => {
         <input
           onChange={(e) => setNewContent({ ...newContent, image: e.target.files[0] })}
           type="file"
-          className="file-input file-input-neutral" />
+          className="file-input file-input-neutral focus:outline-none focus:border-[2px]" />
         <div className="flex items-center gap-2">
           <input
             type="checkbox"
@@ -117,15 +117,19 @@ const ContentForm = ({ contents, setContents }) => {
           />
           <p>Publish as Public.</p>
         </div>
-        <div className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={newContent.isAnonymous}
-            onChange={() => setNewContent({ ...newContent, isAnonymous: !newContent.isAnonymous })}
-            className="checkbox"
-          />
-          <p>Anonymous Post.</p>
-        </div>
+        {/* is anonymous */}
+        {
+          user?.email &&
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              checked={newContent.isAnonymous}
+              onChange={() => setNewContent({ ...newContent, isAnonymous: !newContent.isAnonymous })}
+              className="checkbox"
+            />
+            <p>Anonymous Post.</p>
+          </div>
+        }
         <button className="btn btn-info">submit</button>
       </form>
     </div>

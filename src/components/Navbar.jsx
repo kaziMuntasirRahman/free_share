@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
-    <div>
+    <nav className="max-w-screen">
       <div className="navbar bg-base-100 shadow-sm mb-4">
         <div className="flex-1">
           <Link to='/' className="btn btn-ghost text-xl">FreeShare</Link>
@@ -19,7 +19,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </div>
+    </nav>
   );
 };
 

@@ -1,3 +1,14 @@
+const MyContent = () => {
+  return (
+    <div>
+      
+    </div>
+  );
+};
+
+export default MyContent;
+
+
 import { useEffect, useState } from "react";
 import ContentForm from "./ContentForm";
 import Content from "./Content";
@@ -7,6 +18,15 @@ const Home = () => {
   const [contents, setContents] = useState([])
 
   useEffect(() => setContents(JSON.parse(localStorage.getItem('contents')) || []), [])
+
+  // const handleDelete = async (index) => {
+  //   const isConfirm = confirm("Do you want to delete this post?")
+  //   if(!isConfirm) return;
+  //   let storedContent = JSON.parse(localStorage.getItem('contents'))
+  //   storedContent.splice(index, 1)
+  //   setContents(storedContent)
+  //   localStorage.setItem('contents', JSON.stringify(storedContent))
+  // }
 
   return (
     <div>
@@ -40,5 +60,3 @@ const Home = () => {
     </div>
   );
 };
-
-export default Home;

@@ -16,8 +16,9 @@ const ContentForm = ({ contents, setContents }) => {
     isPublic: false,
     isAnonymous: false
   })
+  const [isLoading, setIsLoading] = useState(false)
 
-  useEffect(()=>{
+  useEffect(() => {
     setNewContent({
       ...newContent.uploader,
       name: user?.displayName,
@@ -31,12 +32,15 @@ const ContentForm = ({ contents, setContents }) => {
 
   const handleContentSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true)
     const { title, description, image, uploader, isAnonymous, isPublic } = newContent;
     console.log(newContent);
 
     //return if the form is empty
-    if (!title && !description && !image)
+    if (!title && !description && !image) {
+      setIsLoading(false)
       return alert("Please Enter your story or image.")
+    }
 
     let imgURL = '';
     // let uploader = { name: '', email: '', photo: '' }
@@ -76,6 +80,7 @@ const ContentForm = ({ contents, setContents }) => {
     } finally {
       e.target.reset();
       setNewContent({ ...newContent, title: "", description: "", image: null, isPublic: false, isAnonymous: false })
+      setIsLoading(false)
     }
   }
 
@@ -83,11 +88,26 @@ const ContentForm = ({ contents, setContents }) => {
 
   return (
     <div>
-      <form onSubmit={handleContentSubmit} className="flex flex-col w-2xs gap-3 bg-emerald-200 p-5 mx-auto">
+      {isLoading && <div className="h-full w-full bg-slate-500/60 absolute top-0 left-0 flex items-center justify-center z-50 " >
+        <span className="loading loading-lg loading-dots scale-200 text-white" />
+      </div>}
+      <form onSubmit={handleContentSubmit} className="flex flex-col w-2xs gap-3 p-5 mx-auto border border-black/20">
         <p>upload content</p>
-        <input onChange={(e) => setNewContent({ ...newContent, title: e.target.value })} type="text" className="input" placeholder="story title" />
-        <textarea onChange={(e) => setNewContent({ ...newContent, description: e.target.value })} type="text" className="textarea" placeholder="write your story" />
-        <input onChange={(e) => setNewContent({ ...newContent, image: e.target.files[0] })} type="file" className="file-input file-input-neutral" />
+        <input
+          onChange={(e) => setNewContent({ ...newContent, title: e.target.value })}
+          type="text"
+          className="focus:outline-none input"
+          placeholder="story title" />
+        <textarea
+          rows={4}
+          onChange={(e) => setNewContent({ ...newContent, description: e.target.value })}
+          type="text"
+          className="focus:outline-none textarea"
+          placeholder="write your story" />
+        <input
+          onChange={(e) => setNewContent({ ...newContent, image: e.target.files[0] })}
+          type="file"
+          className="file-input file-input-neutral" />
         <div className="flex items-center gap-2">
           <input
             type="checkbox"

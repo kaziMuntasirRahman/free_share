@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import Root from "../pages/Root";
 import Home from "../pages/shared/Home";
-import AllPublicContent from "../pages/shared/AllPublicContent";
+import Discover from "../pages/shared/Discover";
 
 const router = createBrowserRouter([
   {
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/discover',
-        element: <AllPublicContent />
+        element: <Discover />
       }
     ]
   }

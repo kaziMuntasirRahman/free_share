@@ -5,6 +5,7 @@ import Discover from "../pages/shared/Discover";
 import MyContents from "../pages/shared/MyContents";
 import Login from "../pages/shared/Login";
 import Register from "../pages/shared/Register";
+import Inbox from "../pages/private/Inbox";
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,11 @@ const router = createBrowserRouter([
       {
         path: '/register',
         element: <Register />
+      },
+      //private routes
+      {
+        path: '/inbox',
+        element: <Inbox />
       }
     ]
   }

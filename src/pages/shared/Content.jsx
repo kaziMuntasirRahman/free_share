@@ -20,14 +20,14 @@ const Content = ({ content, index, myPost = false }) => {
     if (!emailPattern.test(receiver)) {
       return alert("Please enter a valid email address.");
     }
-    const sender = user?.email;
-    let isAnonymous = true;
+    let sender = user?.email;
+    let isSenderAnonymous = false;
     if (!sender) {
-      isAnonymous = true
+      isSenderAnonymous = true
     }
 
     try {
-      const res = await axiosPublic.post('conversations', { content, sender, receiver, isAnonymous })
+      const res = await axiosPublic.post('conversations', { content, sender, receiver, isSenderAnonymous })
       if (res.data.insertedId) {
         alert("Your message has been sent.")
       }
@@ -50,8 +50,10 @@ const Content = ({ content, index, myPost = false }) => {
           className="w-full h-full object-cover hover:scale-110 transition-all duration-300 ease-in-out"
         />
       </div>
-
-      <span className="absolute right-4 top-4 bg-black text-white font-bold text-sm px-3 py-1 ">{index + 1}</span>
+      {
+        index &&
+        <span className="absolute right-4 top-4 bg-black text-white font-bold text-sm px-3 py-1 ">{index + 1}</span>
+      }
 
       <div className="p-4 space-y-2">
         <h1 className="text-xl font-semibold text-gray-800">{title}</h1>

@@ -6,12 +6,12 @@ import { FirebaseContext } from "../providers/FirebaseProvider";
 
 const Navbar = () => {
   const {logOut} = useContext(FirebaseContext)
-  const [userInfo] = useGetUser()
+  const [userInfo, isLoading] = useGetUser()
   const { conversation } = useGetConversation()
   // console.log(conversation)
   const { inbox, outbox } = conversation;
-  console.log('inbox: ', inbox)
-  console.log('outbox: ', outbox)
+  console.log('inbox: ', inbox?.length)
+  console.log('outbox: ', outbox?.length)
   // const { displayName, email, photoURL, savedContent, outbox, likedContent } = userInfo;
   const { displayName, photoURL } = userInfo;
 
@@ -38,6 +38,11 @@ const Navbar = () => {
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn m-1">
               {
+                isLoading?
+                  <div className="avatar">
+                    <div className="mask mask-squircle w-8 skeleton"/>
+                  </div>
+                  :
                 photoURL ?
                   <div className="avatar">
                     <div className="mask mask-squircle w-8">
@@ -61,12 +66,12 @@ const Navbar = () => {
                 displayName ?
                   <>
                     <li>
-                      <Link to='/my-profile' className="btn btn-outline">{displayName}</Link>
+                      <Link to='/my-profile' className="btn">{displayName}</Link>
                     </li>
                     <li>
-                      <button className="btn btn-outline">
+                      <Link to='/inbox' className="btn">
                         Inbox <div className="badge badge-sm badge-secondary ">+{inbox?.length}</div>
-                      </button>
+                      </Link>
                     </li>
                     <li>
                       <div onClick={handleLogout} className="btn btn-error">Logout</div>

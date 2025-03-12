@@ -11,7 +11,7 @@ const Content = ({ content, index, myPost = false }) => {
     // console.log(content)
     const receiver = prompt("Enter receiver email. \nContent will be sent even if the user doesn't exist. He/she will get the message after he creates an account.")
     if (!receiver) return;
-    console.log(receiver)
+    // console.log(receiver)
 
     // Email validation using regex
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

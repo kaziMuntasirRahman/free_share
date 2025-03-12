@@ -1,9 +1,30 @@
 import { Link } from "react-router-dom";
 import useGetUser from "../hooks/useGetUser";
+import useGetConversation from "../hooks/useGetConversation";
+import { useContext } from "react";
+import { FirebaseContext } from "../providers/FirebaseProvider";
 
 const Navbar = () => {
+  const {logOut} = useContext(FirebaseContext)
   const [userInfo] = useGetUser()
-  const { displayName, email, photoURL, savedContent, inbox, outbox, likedContent } = userInfo
+  const { conversation } = useGetConversation()
+  // console.log(conversation)
+  const { inbox, outbox } = conversation;
+  console.log('inbox: ', inbox)
+  console.log('outbox: ', outbox)
+  // const { displayName, email, photoURL, savedContent, outbox, likedContent } = userInfo;
+  const { displayName, photoURL } = userInfo;
+
+  const handleLogout = async ()=>{
+    try{
+      await logOut()
+    }catch(err){
+      console.log(err.message)
+    }finally{
+      console.log('finally block is executed.')
+    }
+
+  }
   return (
     <nav className="max-w-screen">
       <div className="navbar bg-base-100 shadow-sm mb-4">
@@ -16,21 +37,46 @@ const Navbar = () => {
           <Link to='/discover' className="text-lg hover:link mr-3">Discover</Link>
           <div className="dropdown dropdown-end">
             <div tabIndex={0} role="button" className="btn m-1">
-              <div className="avatar">
-                <div className="mask mask-squircle w-8">
-                  <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-                </div>
-              </div>
+              {
+                photoURL ?
+                  <div className="avatar">
+                    <div className="mask mask-squircle w-8">
+                      {/* <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" /> */}
+                      <img src={photoURL} />
+                    </div>
+                  </div>
+                  :
+                  <div className="avatar avatar-placeholder">
+                    <div className="bg-neutral text-neutral-content w-8 rounded-full tooltip" data-tip="Guest" >
+                      <span className="text-3xl">G</span>
+                    </div>
+                  </div>
+              }
+
+
+
             </div>
             <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm border border-black">
-              <li>
-                <Link to='/login' className="btn btn-outline">Login</Link>
-              </li>
-              <li>
-                <button className="btn btn-outline">
-                  Inbox <div className="badge badge-sm badge-secondary ">+{inbox.length}</div>
-                </button>
-              </li>
+              {
+                displayName ?
+                  <>
+                    <li>
+                      <Link to='/my-profile' className="btn btn-outline">{displayName}</Link>
+                    </li>
+                    <li>
+                      <button className="btn btn-outline">
+                        Inbox <div className="badge badge-sm badge-secondary ">+{inbox?.length}</div>
+                      </button>
+                    </li>
+                    <li>
+                      <div onClick={handleLogout} className="btn btn-error">Logout</div>
+                    </li>
+                  </>
+                  :
+                  <li>
+                    <Link to='/login' className="btn btn-outline">Login</Link>
+                  </li>
+              }
             </ul>
           </div>
         </div>

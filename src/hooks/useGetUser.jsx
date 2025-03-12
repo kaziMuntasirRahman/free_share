@@ -8,13 +8,14 @@ const useGetUser = () => {
   const axiosPublic = useAxiosPublic()
 
   const { data: userInfo = {}, isLoading, refetch } = useQuery({
-    queryKey: ['user'],
+    queryKey: ['user', user?.email],
     queryFn: async () => {
-      const response = await axiosPublic.get(`users/${user?.email}`)
+      const response = await axiosPublic.get(`users/${user.email}`)
       return response.data;
     }
   })
 
+  // console.log(userInfo)
   return [userInfo, isLoading, refetch];
 };
 

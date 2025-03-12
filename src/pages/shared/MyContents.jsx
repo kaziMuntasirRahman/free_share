@@ -8,7 +8,7 @@ const MyContents = () => {
   return (
       <div>
         <p className="text-lg my-3">total content available: {contents.length}</p>
-        <div className="flex flex-wrap justify-between ">
+        <div className="flex flex-wrap justify-evenly ">
           {
             // Array(10).fill().map((content, index) =>
             contents.map((content, index) =>

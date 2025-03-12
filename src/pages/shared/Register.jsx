@@ -8,7 +8,7 @@ const imgbb_api_url = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE
 
 const Register = () => {
   const navigate = useNavigate()
-  const { createUser } = useContext(FirebaseContext)
+  const { createUser, loading } = useContext(FirebaseContext)
   const axiosPublic = useAxiosPublic()
   const [newUser, setNewUser] = useState({
     name: "",
@@ -25,7 +25,7 @@ const Register = () => {
     let imgURL = '';
 
     try {
-      if (newUser.photoURL) {
+      if (photoURL) {
         const res = await axios.post(imgbb_api_url, imageFile, {
           headers: {
             "content-type": "multipart/form-data", // Ensure the file is uploaded correctly
@@ -65,9 +65,14 @@ const Register = () => {
 
   return (
     <div>
-      <p>Register Now</p>
-      <p>Already have an account? <Link className="text-blue-600" to='/login'>Login Now</Link></p>
-      <form onSubmit={handleRegister} className="flex flex-col w-2xs gap-3 p-5 mx-auto border border-black/20">
+      <form onSubmit={handleRegister} className="flex flex-col w-2xs gap-3 p-5 mx-auto border border-black/20 relative">
+      {
+          loading &&
+          <div className="absolute inset-0 flex justify-center items-center z-50 bg-slate-900/40">
+          <span className="loader"></span>
+        </div>
+        }
+        <p className="text-center mb-2">Register Now</p>
         <input
           onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
           type="text"
@@ -95,8 +100,9 @@ const Register = () => {
           className="file-input file-input-neutral focus:outline-none"
           placeholder="enter your photo url"
         />
-        <button className="btn btn-info">Register</button>
+        <button className="btn btn-info text-white">Register</button>
 
+        <p className="text-sm">Already have an account? <Link className="text-blue-600 hover:underline" to='/login'>Login Now</Link></p>
       </form>
     </div>
   );

@@ -6,6 +6,7 @@ import MyContents from "../pages/shared/MyContents";
 import Login from "../pages/shared/Login";
 import Register from "../pages/shared/Register";
 import Inbox from "../pages/private/Inbox";
+import Outbox from "../pages/private/Outbox";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: '/inbox',
         element: <Inbox />
+      },
+      {
+        path: '/outbox',
+        element: <Outbox />
       }
     ]
   }

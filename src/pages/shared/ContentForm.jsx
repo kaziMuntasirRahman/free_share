@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import useAxiosPublic from "../../hooks/useAxiosPublic";
 import { FirebaseContext } from "../../providers/FirebaseProvider";
 
@@ -14,21 +14,14 @@ const ContentForm = ({ contents, setContents }) => {
     description: "",
     image: null,
     isPublic: false,
-    isAnonymous: false
+    isAnonymous: false,
+    uploader: {
+      name: user?.displayName || "",
+      email: user?.email || "",
+      photo: user?.photoURL || ""
+    }
   })
   const [isLoading, setIsLoading] = useState(false)
-
-  useEffect(() => {
-    setNewContent({
-      ...newContent.uploader,
-      name: user?.displayName,
-      email: user?.email,
-      photo: user?.photoURL
-    })
-
-  }, [])
-
-
 
   const handleContentSubmit = async (e) => {
     e.preventDefault();
